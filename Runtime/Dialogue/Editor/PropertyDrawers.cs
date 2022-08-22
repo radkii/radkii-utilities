@@ -70,11 +70,14 @@ public class DialogueFieldDrawer : PropertyDrawer
 {
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
+		//label.
+		
 		var typeProperty = property.FindPropertyRelative("fieldType");
 		//DialogueFieldType type = (DialogueFieldType)EditorGUI.EnumPopup(rect, (DialogueFieldType)Enum.GetValues(typeof(DialogueFieldType)).GetValue(typeProperty.enumValueIndex));
 		DialogueFieldType type = (DialogueFieldType)Enum.GetValues(typeof(DialogueFieldType)).GetValue(typeProperty.enumValueIndex);
-
-		float lines = 1f;
+		//DialogueFieldType type = (DialogueFieldType)typeProperty.en;
+		
+		float lines = 2f;
 		switch (type)
 		{
 			case DialogueFieldType.Talk:
@@ -84,8 +87,8 @@ public class DialogueFieldDrawer : PropertyDrawer
 				lines = 3f;
 				break;
 		}
-
-		return lines * 20f;
+		Debug.Log(lines);
+		return lines * EditorGUIUtility.singleLineHeight;
 	}
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 	{
@@ -103,7 +106,7 @@ public class DialogueFieldDrawer : PropertyDrawer
 		EditorGUIUtility.labelWidth = 30;
 		EditorGUI.indentLevel = 0;
 
-		rect.height = 20f;
+		rect.height = EditorGUIUtility.singleLineHeight;
 		rect.width /= 3f;
 		inputProperty.boolValue = EditorGUI.Toggle(rect, "Wait:", inputProperty.boolValue);
 		rect.x += rect.width;
@@ -114,7 +117,7 @@ public class DialogueFieldDrawer : PropertyDrawer
 		rect.x -= rect.width / 2f;
 		rect.width *= 1.5f;
 
-		rect.y += 20f;
+		rect.y += EditorGUIUtility.singleLineHeight;
 		switch (type)
 		{
 			case DialogueFieldType.Talk:
@@ -122,22 +125,22 @@ public class DialogueFieldDrawer : PropertyDrawer
 				EditorGUI.LabelField(rect, "Character Name: ");
 				rect.x += rect.width;
 				characterProperty.stringValue = EditorGUI.TextField(rect, characterProperty.stringValue);
-				rect.y += 20f;
+				rect.y += EditorGUIUtility.singleLineHeight;
 				rect.x -= rect.width;
 				rect.width *= 2f;
-				rect.height = 80f;
+				rect.height = EditorGUIUtility.singleLineHeight * 4f;
 				GUIStyle style = new GUIStyle(EditorStyles.textField);
 				style.wordWrap = true;
-				style.fixedHeight = 80f;
+				style.fixedHeight = EditorGUIUtility.singleLineHeight * 4f;
 				nameProperty.stringValue = EditorGUI.TextArea(rect, nameProperty.stringValue, style);
 				break;
 			case DialogueFieldType.CustomMethod:
-				rect.height = 20f;
+				rect.height = EditorGUIUtility.singleLineHeight;
 				rect.width /= 2f;
 				EditorGUI.LabelField(rect, "Method Name: ");
 				rect.x += rect.width;
 				methodProperty.stringValue = EditorGUI.TextField(rect, methodProperty.stringValue);
-				rect.y += 20f;
+				rect.y += EditorGUIUtility.singleLineHeight;
 				rect.x -= rect.width;
 				EditorGUI.LabelField(rect, "Parameter: ");
 				rect.x += rect.width;
