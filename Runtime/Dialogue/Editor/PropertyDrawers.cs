@@ -87,7 +87,6 @@ public class DialogueFieldDrawer : PropertyDrawer
 				lines = 3f;
 				break;
 		}
-		Debug.Log(lines);
 		return lines * EditorGUIUtility.singleLineHeight;
 	}
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
@@ -150,12 +149,12 @@ public class DialogueFieldDrawer : PropertyDrawer
 	}
 }
 
-[CustomPropertyDrawer(typeof(State.ScriptMethodFormat))]
-public class ScriptMethodFormatDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(NodeNameFormat))]
+public class NodeNameFormatDrawer : PropertyDrawer
 {
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		return 16f;
+		return EditorGUIUtility.singleLineHeight * 2;
 	}
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 	{
@@ -166,23 +165,26 @@ public class ScriptMethodFormatDrawer : PropertyDrawer
 
 		var target = property.serializedObject.targetObject;
 
-		var methodProperty = property.FindPropertyRelative("methodName");
-		var argProperty = property.FindPropertyRelative("arguments");
+		var methodProperty = property.FindPropertyRelative("nodeName");
+		var argProperty = property.FindPropertyRelative("displayName");
 
 		EditorGUIUtility.wideMode = true;
 		EditorGUIUtility.labelWidth = 30;
 		EditorGUI.indentLevel = 0;
-		rect.width /= 9;
+		rect.width /= 6f;
+		rect.height /= 2f;
 
-		EditorGUI.LabelField(GetNewRect(2f), "Invoke: ");
-		rect.x += rect.width * 2;
-
-		methodProperty.stringValue = EditorGUI.TextField(GetNewRect(3f), methodProperty.stringValue);
-		rect.x += rect.width * 3;
-
-		EditorGUI.LabelField(rect, " :");
+		EditorGUI.LabelField(rect, "Node");
 		rect.x += rect.width;
 
-		argProperty.stringValue = EditorGUI.TextField(GetNewRect(3f), argProperty.stringValue);
+		methodProperty.stringValue = EditorGUI.TextField(GetNewRect(2.4f), methodProperty.stringValue);
+		rect.x += rect.width * 3;
+
+		EditorGUI.LabelField(GetNewRect(2f), "displays as:");
+		rect.x += rect.width * 2;
+
+		rect.x -= rect.width * 6f;
+		rect.y += EditorGUIUtility.singleLineHeight;
+		argProperty.stringValue = EditorGUI.TextField(GetNewRect(6f), argProperty.stringValue);
 	}
 }

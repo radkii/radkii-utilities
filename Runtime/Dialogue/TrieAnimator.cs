@@ -98,7 +98,7 @@ namespace Radkii.Dialogue
 			foreach(var s in states)
 			{
 				State st = s.state.behaviours[0] as State;
-				List<string> names = new List<string>();
+				List<NodeNameFormat> formats = new List<NodeNameFormat>();
 				//List<State> children = new List<State>();
 				for (int i = 0; i < s.state.transitions.Length; i++)
 				{
@@ -107,7 +107,8 @@ namespace Radkii.Dialogue
 					//print(s.state.transitions[i].destinationState.behaviours[0]);
 
 					t.name = t.destinationState.name;
-					names.Add((s.state.transitions[i].destinationState.behaviours[0] as State).displayName);
+					State dest = s.state.transitions[i].destinationState.behaviours[0] as State;
+					formats.Add(new NodeNameFormat(dest.stateName, dest.displayName));
 					//children.Add(t.destinationState.behaviours[0] as State);
 
 					t.hasExitTime = false;
@@ -122,7 +123,22 @@ namespace Radkii.Dialogue
 				st.stateName = s.state.name;
 				if (st.displayName == "") { st.displayName = s.state.name; }
 				st.ta = this;
-				st.nodeNames = names.ToArray();
+
+				//NodeNameFormat[] newNodeNames = new NodeNameFormat[names.Count];
+				//for(int i = 0; i < names.Count; i++)
+				//{
+				//	if(!Array.Exists<NodeNameFormat>(st.nodeNames, nnf => nnf.nodeName == names[i]))
+				//	{
+				//		newNodeNames[i] = new NodeNameFormat(names[i], names[i]);
+				//	}
+				//	else
+				//	{
+				//		newNodeNames[i] = new NodeNameFormat(names[i], st.nodeNames[i].displayName);
+				//	}
+				//}
+				//st.nodeNames = names.ConvertAll<NodeNameFormat>(s => new NodeNameFormat(s, s)).ToArray();
+				st.nodeNames = new NodeNameFormat[formats.Count];
+				Array.Copy(formats.ToArray(), st.nodeNames, formats.Count);
 				st.self = s.state;
 			}
 		}
@@ -274,7 +290,7 @@ namespace Radkii.Dialogue
 					else
 					{
 						buttons[i].gameObject.SetActive(true);
-						buttons[i].gameObject.GetComponentInChildren<TextMeshProUGUI>().text = currentState.nodeNames[i];
+						buttons[i].gameObject.GetComponentInChildren<TextMeshProUGUI>().text = currentState.nodeNames[i].displayName;
 					
 						//buttons[i].gameObject.GetComponent<Animator>().SetTrigger("Show");
 						yield return new WaitForSecondsRealtime(0.5f);

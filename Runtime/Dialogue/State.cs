@@ -8,6 +8,19 @@ using System.Globalization;
 
 namespace Radkii.Dialogue
 {
+    [Serializable]
+    public class NodeNameFormat
+    {
+        public NodeNameFormat(string _nodeName, string _displayName)
+        {
+            nodeName = _nodeName;
+            displayName = _displayName;
+        }
+
+        public string nodeName;
+        public string displayName;
+    }
+
     //This class is added to every state as a behaviour in the statemachine
     //by Setup() or the "Setup Trie" button in TrieAnimator
     public class State : StateMachineBehaviour
@@ -20,7 +33,7 @@ namespace Radkii.Dialogue
         [TextArea]
         public string displayName; //Name to display in choices; can be different from state name
         [Space(5f)]
-        public string[] nodeNames; //nodeNames is filled automatically by Setup() in TrieAnimator
+        public NodeNameFormat[] nodeNames; //nodeNames is filled automatically by Setup() in TrieAnimator
 
         [HideInInspector]
         public TrieAnimator ta; //TrieAnimator reference assigned by itself in Setup()
@@ -35,16 +48,6 @@ namespace Radkii.Dialogue
         public Condition[] conditions = { new Condition() };
         //[Header("Actions:")]
         public Action[] actions = { new Action() };
-
-        [Serializable]
-        public class ScriptMethodFormat
-	    {
-            public string methodName;
-            public string arguments;
-	    }
-
-        [Space(20f)]
-        public ScriptMethodFormat[] enterEventNames;
 
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         bool reading = false, sceneChange = false;
@@ -62,19 +65,19 @@ namespace Radkii.Dialogue
 				    break;
 			    case StateTypes.Burner:
                     ta.burn = ta.previousState;
-                    ta.burnIndex = Array.FindIndex<string>(ta.previousState.nodeNames, s => s == self.name);
+                    ta.burnIndex = Array.FindIndex<NodeNameFormat>(ta.previousState.nodeNames, s => s.nodeName == self.name);
                     break;
                 case StateTypes.BurnerSkip:
                     ta.burn = ta.previousState;
-                    ta.burnIndex = Array.FindIndex<string>(ta.previousState.nodeNames, s => s == self.name);
+                    ta.burnIndex = Array.FindIndex<NodeNameFormat>(ta.previousState.nodeNames, s => s.nodeName == self.name);
                     break;
 			    case StateTypes.PointBurner:
                     ta.pointBurn = ta.previousState;
-                    ta.pointBurnIndex = Array.FindIndex<string>(ta.previousState.nodeNames, s => s == self.name);
+                    ta.pointBurnIndex = Array.FindIndex<NodeNameFormat>(ta.previousState.nodeNames, s => s.nodeName == self.name);
                     break;
                 case StateTypes.PointBurnerSkip:
                     ta.pointBurn = ta.previousState;
-                    ta.pointBurnIndex = Array.FindIndex<string>(ta.previousState.nodeNames, s => s == self.name);
+                    ta.pointBurnIndex = Array.FindIndex<NodeNameFormat>(ta.previousState.nodeNames, s => s.nodeName == self.name);
                     break;
                 case StateTypes.Bomb:
                     ta.Delete(this);
@@ -95,12 +98,6 @@ namespace Radkii.Dialogue
                 State b = self.transitions[ta.pointBurnIndex].destinationState.behaviours[0] as State;
                 ta.Ignore(b);
                 ta.pointBurn = null;
-            }
-
-            //Event
-            foreach(ScriptMethodFormat s in enterEventNames)
-		    {
-                if(s.methodName == "load_scene") { sceneChange = true; }
             }
 
             //Action
