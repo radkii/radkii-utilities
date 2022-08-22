@@ -74,6 +74,11 @@ namespace Radkii.Dialogue
 			AnimatorController ctrl = (AnimatorController)anim.runtimeAnimatorController;
 
 			ctrl.parameters = new AnimatorControllerParameter[] { };
+			if(buttons.Length == 0)
+			{
+				Debug.LogError("No buttons were found. Maybe you forgot to assign them in your TrieAnimator object?");
+				return;
+			}
 			for (int i = 0; i < buttons.Length; i++)
 			{
 				ctrl.AddParameter(i.ToString(), AnimatorControllerParameterType.Trigger);
