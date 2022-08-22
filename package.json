@@ -1,0 +1,20 @@
+{
+  "name": "com.radkii.radkii-utilities",
+  "version": "1.0.0",
+  "displayName": "Radkii Utilities",
+  "description": "General purpose utilities and scripts.",
+  "unity": "2021.3",
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6"
+  },
+  "keywords": [
+    "library",
+    "utility"
+  ],
+  "author": {
+    "name": "Radkii",
+    "email": "real.radkii@gmail.com",
+    "url": ""
+  },
+  "type": "library"
+}
