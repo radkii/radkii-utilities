@@ -11,6 +11,11 @@ namespace Radkii.Dialogue
     [Serializable]
     public class DialogueField
     {
+        public DialogueField()
+		{
+            waitForInput = true;
+		}
+        
         public DialogueFieldType fieldType;
         public bool waitForInput = true;
 

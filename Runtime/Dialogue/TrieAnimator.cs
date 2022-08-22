@@ -43,6 +43,7 @@ namespace Radkii.Dialogue
 		//To be set in script
 		[HideInInspector] public List<ScriptMethod<string>> customMethods;
 		[HideInInspector] public List<Character> characters;
+
 		private Character currentCharacter;
 
 		private List<string> toDelete, toIgnore;
@@ -184,6 +185,8 @@ namespace Radkii.Dialogue
 
 		public void NextInDialogue()
 		{
+			if (dialogueProgress == -1) return;
+			
 			if(dialogueProgress >= currentState.dialogue.Length && dialogueProgress >= 0)
 			{
 				if(currentState.nodeNames.Length > 0)
